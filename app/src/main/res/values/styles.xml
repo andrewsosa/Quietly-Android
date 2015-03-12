@@ -1,0 +1,86 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <!-- <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar"> -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- NEVER MODIFY THESE, CHANGE THE COLORS FILE -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+        <!-- Text Colors -->
+        <item name="android:textColorPrimary">@color/primary_text_default_material_dark</item>
+        <item name="android:textColorSecondary">@color/primary_text_default_material_light</item>
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+        <item name="android:actionMenuTextColor">@color/primary_text_default_material_light</item>
+
+
+        <item name="android:actionMenuTextAppearance">@style/AppTheme.ToolbarMenuItems</item>
+
+
+        <!--<item name="android:homeAsUpIndicator">@drawable/ic_clear_grey600_24dp</item>
+        <item name="homeAsUpIndicator">@drawable/ic_clear_grey600_24dp</item> -->
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <!-- specify enter and exit transitions
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>  -->
+
+
+        <!-- Enable dialog stuff -->
+        <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
+
+    </style>
+
+
+    <!-- Custom styles for children activity -->
+    <style name="ActivityEventTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
+
+        <!-- NEVER MODIFY THESE, CHANGE THE COLORS FILE -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+        <!-- Text Colors -->
+        <item name="android:textColorPrimary">@color/primary_text_default_material_dark</item>
+        <item name="android:textColorSecondary">@color/primary_text_default_material_light</item>
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+
+        <!-- Theme fixes for windows and stuff -->
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
+
+        <!-- <item name="android:homeAsUpIndicator">@drawable/ic_clear_grey600_24dp</item>
+        <item name="homeAsUpIndicator">@drawable/ic_clear_grey600_24dp</item> -->
+
+
+    </style>
+
+    <!-- Styles for pop-up dialogs -->
+    <style name="AppTheme.DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="android:colorPrimary">@color/primaryColor</item>
+        <item name="android:colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="android:colorAccent">@color/accentColor</item>
+
+    </style>
+
+
+    <!-- Style for font-size of Menu Item -->
+    <style name="AppTheme.ToolbarMenuItems" parent="AppTheme">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+</resources>

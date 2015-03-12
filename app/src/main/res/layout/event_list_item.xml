@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/eventName"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/abc_primary_text_material_light"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="56dp"
+        android:transitionName="@string/event_activity_transition" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/subtitleText"
+        android:layout_below="@+id/eventName"
+        android:layout_alignStart="@+id/eventName"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp" />
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/activeIcon"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_notifications_grey600_24dp"
+        android:background="@drawable/avatar_background"
+        android:paddingLeft="1dp" />
+
+    <Switch
+        android:layout_width="48dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/activeSwitch"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:checked="false" />
+
+
+    <!-- <com.pkmmte.view.CircularImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:src="@drawable/ic_notifications_grey600_18dp"
+        app:selector="true"
+        app:border_color="#EEEEEE"
+        app:border_width="0dp"
+        app:shadow="false" /> -->
+
+</RelativeLayout>

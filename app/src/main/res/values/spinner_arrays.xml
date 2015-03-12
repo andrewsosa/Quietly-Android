@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mode_options">
+        <item>All Alerts</item>
+        <item>Priority Only</item>
+        <item>Do Not Disturb</item>
+    </string-array>
+    <string-array name="time_options">
+        <item>Morning</item>
+        <item>Afternoon</item>
+        <item>Evening</item>
+        <item>Night</item>
+        <item>Set Time…</item>
+    </string-array>
+    <string-array name="repeat_options">
+        <item>One-time</item>
+        <item>Only sometimes</item>
+        <item>Whenever</item>
+    </string-array>
+</resources>
