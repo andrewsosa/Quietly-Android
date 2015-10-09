@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:id="@+id/tile"
+    android:background="?attr/selectableItemBackground"
+    android:layout_height="88dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event"
+        android:id="@+id/eventName"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-regular"
+        android:textColor="@color/abc_primary_text_material_light"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:layout_marginLeft="56dp"
+        android:layout_alignTop="@+id/activeIcon"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:00 AM"
+        android:id="@+id/subtitleText"
+        android:layout_below="@+id/eventName"
+        android:layout_alignStart="@+id/eventName"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/activeIcon"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_priority_vector"
+        android:tint="@color/icon_tint"
+        android:background="@drawable/circular_background"
+        android:duplicateParentState="true"
+        android:layout_centerVertical="true" />
+
+    <Switch
+        android:layout_width="48dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/activeSwitch"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:checked="false" />
+
+
+
+
+</RelativeLayout>
