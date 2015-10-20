@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="days">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="filters_front_end">
+        <item>All Notifications</item>
+        <item>Priority Only</item>
+        <item>Alarms Only</item>
+        <item>Total Silence</item>
+    </string-array>
+
+    <!-- These MUST match constants in Event.java -->
+    <string-array name="filters_back_end">
+        <item>all</item>
+        <item>priority</item>
+        <item>alarms</item>
+        <item>none</item>
+    </string-array>
+
+    <!-- These MUST match constants in colors.xml -->
+    <integer-array name="filter_colors">
+        <item>@color/all</item>
+        <item>@color/priority</item>
+        <item>@color/alarms</item>
+        <item>@color/none</item>
+    </integer-array>
+
+    <!-- These MUST match constants in colors.xml -->
+    <integer-array name="filter_colors_dark">
+        <item>@color/allDark</item>
+        <item>@color/priorityDark</item>
+        <item>@color/alarmsDark</item>
+        <item>@color/noneDark</item>
+    </integer-array>
+    
+    <!-- These MUST match constants in colors.xml -->
+    <integer-array name="filter_colors_light">
+        <item>@color/allLight</item>
+        <item>@color/priorityLight</item>
+        <item>@color/alarmsLight</item>
+        <item>@color/noneLight</item>
+    </integer-array>
+    
+    <string-array name="icon_backgrounds">
+        <item>@drawable/bg_all</item>
+        <item>@drawable/bg_priority</item>
+        <item>@drawable/bg_alarms</item>
+        <item>@drawable/bg_none</item>
+    </string-array>
+
+    <string-array name="icon_foregrounds">
+        <item>@drawable/ic_all</item>
+        <item>@drawable/ic_priority</item>
+        <item>@drawable/ic_alarms</item>
+        <item>@drawable/ic_none</item>
+    </string-array>
+
+    <string-array name="icon_foregrounds_vectors">
+        <item>@drawable/ic_notifications_24dp</item>
+        <item>@drawable/ic_star_24dp</item>
+        <item>@drawable/ic_alarm_24dp</item>
+        <item>@drawable/ic_dnd_forwardslash_24dp</item>
+    </string-array>
+
+</resources>

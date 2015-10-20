@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_active="true">
-        <bitmap android:src="@drawable/ic_star_36dp" android:tint="@color/white"/>
+        <bitmap android:src="@drawable/ic_dnd_forwardslash_36dp" android:tint="@color/white"/>
     </item>
     <item android:state_active="false">
-        <bitmap android:src="@drawable/ic_star_36dp" android:tint="@color/grey_600"/>
+        <bitmap android:src="@drawable/ic_dnd_forwardslash_36dp" android:tint="@color/grey_600"/>
     </item>
 </selector>

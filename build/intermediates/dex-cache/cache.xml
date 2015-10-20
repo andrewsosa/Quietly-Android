@@ -2,74 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/jars/classes.jar"
+        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.yqritc/recyclerview-flexibledivider/1.2.6/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-a54313714aa09a0cc5ad02ef5366a66f8d5efed9.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/libs/bolts-android-1.2.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="44780c2cf98f6a3cf4e77f1234d644758b329201">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.1-378b2f8939f3079eef6278ca24cf76e73425886d.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-2ff96a77e464ec467075fafa19cc07ccf14b6f81.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/libs/Parse-1.10.2.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="a859414011ce2c18187acc83319688e6bd340635">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/Parse-1.10.2-f299b1691051deabf831e01bacfbf2eda8eee007.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.6.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="1c83e45c56a824bc54f276b2fa071f1914cceba7">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-c188dabb269a3d81d15a0a2f645585a04b3cebfb.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-f5beafa9fe7d28b1ef0b321098c9faf55d3dd271.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-9f8e01fd868ea8ffd146ba329d1f21b7edbc5456.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-397ad9d2c65820e476f2c31b48abbab94654bba5.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-c3e0655bf1210c0b356c8871cc44cd387ad0ddcd.jar" />
-    </item>
-    <item
-        jar="/Users/andrewsosa/Documents/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-c7d2e4cec591685c2252ccdcd0f8309200b16d78.jar" />
+        sha1="cbdf8928adb2f3862c10c9f1c75ea324f6c9a3a9">
+        <dex dex="/Users/andrewsosa/Documents/Android/Quietly/app/build/intermediates/pre-dexed/debug/classes-fb397a99ec087f33bea813724a69119028951564.jar" />
     </item>
 
 </items>

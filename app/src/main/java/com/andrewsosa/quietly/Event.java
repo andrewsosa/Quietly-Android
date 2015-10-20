@@ -1,31 +1,53 @@
 package com.andrewsosa.quietly;
 
+import android.app.NotificationManager;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  *  @author     Andrew Sosa     andrewsosa001@gmail.com
  *  @version    1.0
- *  @since      2015-6-30
+ *  @since      2015-10-01
  */
 @ParseClassName("Event")
 public class Event extends ParseObject implements Serializable {
 
 
     public static final String ACTIVE = "ACTIVE";
-    public static final String HOUR = "HOUR";
-    public static final String MINUTE = "MINUTE";
+    public static final String START_HOUR = "START_HOUR";
+    public static final String START_MINUTE = "START_MINUTE";
+    public static final String END_HOUR = "END_HOUR";
+    public static final String END_MINUTE = "END_MINUTE";
     public static final String LABEL = "LABEL";
+    public static final String DURATION = "DURATION";
+    public static final String FILTER = "FILTER";
+    public static final String CUSTOM_ID = "customID";
+
+    public static final int ALL = 0;
+    public static final int PRIORITY = 1;
+    public static final int ALARMS = 2;
+    public static final int NONE = 3;
 
     public static final boolean DEFAULT = true;
+    public static final int DEFAULT_START_HOUR = 8;
+    public static final int DEFAULT_END_HOUR = 17;
 
     public Event() {
 
+    }
+
+    public Event(int filter) {
+        setFilter(filter);
+        setActive(DEFAULT);
+        setLabel("Event");
+        setStartTime(DEFAULT_START_HOUR, 0);
+        setEndTime(DEFAULT_END_HOUR, 0);
+        put(CUSTOM_ID, UUID.randomUUID().toString());
     }
 
 
@@ -34,10 +56,10 @@ public class Event extends ParseObject implements Serializable {
      * @param hour      Hour of the day for event.
      * @param minute    Minute of hour for event.
      */
-    public Event(int hour, int minute) {
-        setActive(DEFAULT);
-        setTime(hour, minute);
-        setLabel("Reminder");
+    public Event(String filter, int hour, int minute) {
+        super(filter);
+        setStartTime(hour, minute);
+
     }
 
     /**
@@ -46,9 +68,8 @@ public class Event extends ParseObject implements Serializable {
      * @param hour      Hour of the day for event.
      * @param minute    Minute of hour for event.
      */
-    public Event(String label, int hour, int minute) {
-        setActive(DEFAULT);
-        setTime(hour, minute);
+    public Event(String filter, String label, int hour, int minute) {
+        this(filter, hour, minute);
         setLabel(label);
     }
 
@@ -59,10 +80,14 @@ public class Event extends ParseObject implements Serializable {
      * @param minute    Minute of hour for event.
      * @param active    Whether event will trigger a reminder.
      */
-    public Event(String label, int hour, int minute, boolean active) {
+    public Event(String filter, String label, int hour, int minute, boolean active) {
+        this(filter, label, hour, minute);
         setActive(active);
-        setTime(hour, minute);
-        setLabel(label);
+
+    }
+
+    public String getCustomId() {
+        return getString(CUSTOM_ID);
     }
 
     public boolean isActive() {
@@ -88,38 +113,93 @@ public class Event extends ParseObject implements Serializable {
         pinInBackground();
     }
 
-    public void setHour(int hour) {
-        put(HOUR, hour);
+    public void setStartHour(int hour) {
+        put(START_HOUR, hour);
     }
 
-    public int getHour() {
-        return getInt(HOUR);
+    public int getStartHour() {
+        return getInt(START_HOUR);
     }
 
-    public void setMinute(int minute) {
-        put(MINUTE, minute);
+    public void setStartMinute(int minute) {
+        put(START_MINUTE, minute);
     }
 
-    public int getMinute() {
-        return getInt(MINUTE);
+    public int getStartMinute() {
+        return getInt(START_MINUTE);
     }
 
-    public void setTime(int hour, int minute) {
-        setHour(hour);
-        setMinute(minute);
+    public void setStartTime(int hour, int minute) {
+        setStartHour(hour);
+        setStartMinute(minute);
 
-        int comparableTime = (hour * 60) + minute;
-        put("comparableTime", comparableTime);
+        updateComparableTime();
+        if(has(END_HOUR)) calculateDuration();
+
+        //int comparableTime = (hour * 60) + minute;
+        //put("comparableTime", comparableTime);
 
         pinInBackground();
+    }
+
+    public void setEndTime(int hour, int minute) {
+        setEndHour(hour);
+        setEndMinute(minute);
+        if(has(START_HOUR)) calculateDuration();
+
+    }
+
+    public void setEndHour(int hour) {
+        put(END_HOUR, hour);
+    }
+
+    public void setEndMinute(int minute) {
+        put(END_MINUTE, minute);
+    }
+
+    public int getEndHour() {
+        return getInt(END_HOUR);
+    }
+
+    public int getEndMinute() {
+        return getInt(END_MINUTE);
+    }
+
+    public void setFilter(int filter) {
+        put(FILTER, filter);
+    }
+
+    public int getFilter() {
+        return getInt(FILTER);
+    }
+
+    public void calculateDuration() {
+        int startHour = getStartHour();
+        int startMinute = getStartMinute();
+
+        int endHour = getEndHour();
+        int endMinute = getEndMinute();
+
+        int dHour = endHour - startHour;
+        int dMinute = endMinute - startMinute;
+
+        if(dHour < 0) dHour += 24;
+        if(dMinute < 0) dMinute += 60;
+
+        int duration = ((dHour * 60) + dMinute) * 60;
+        put(DURATION, duration);
+    }
+
+    public int getDuration() {
+        return getInt(DURATION);
     }
 
     /**
      * @return Returns a HH:MM AM/PM format string for the event's time.
      */
-    public String getStringTime() {
-        int minute = getMinute();
-        int hourOfDay = getHour();
+    public String getStringTime(int hourOfDay, int minute) {
+        //int minute = getStartMinute();
+        //int hourOfDay = getStartHour();
 
         String tempMinute = (minute >= 10) ? "" + minute : "0" + minute;
 
@@ -134,13 +214,31 @@ public class Event extends ParseObject implements Serializable {
         return tempHour + ":" + tempMinute + " " + AMPM;
     }
 
+    public String getStringFilter() {
+        switch (getFilter()) {
+            case 0: return "All notifications";
+            case 1: return "Priority Only";
+            case 2: return "Alarms Only";
+            case 3: return "Total Silence";
+            default: return "Do Not Disturb";
+        }
+    }
+
+    public String getStringStart() {
+        return getStringTime(getStartHour(), getStartMinute());
+    }
+
+    public String getStringEnd() {
+        return getStringTime(getEndHour(), getEndMinute());
+    }
+
     @Override
     public String toString() {
         return getLabel();
     }
 
     public static ParseQuery<Event> getQuery() {
-        return new ParseQuery<>(Event.class);
+        return new ParseQuery<>(Event.class).fromLocalDatastore();
     }
 
     public void onUpdate() {
@@ -148,8 +246,27 @@ public class Event extends ParseObject implements Serializable {
     }
 
     public void updateComparableTime() {
-        int comparableTime = (getHour() * 60) + getMinute();
+        int comparableTime = (getStartHour() * 60) + getStartMinute();
         put("comparableTime", comparableTime);
+    }
+
+    public int getComparableTime() {
+        return getInt("comparableTime");
+    }
+
+    public int getManagerFilter() {
+        switch(getFilter()) {
+            case 0:
+                return NotificationManager.INTERRUPTION_FILTER_ALL;
+            case 1:
+                return NotificationManager.INTERRUPTION_FILTER_PRIORITY;
+            case 2:
+                return NotificationManager.INTERRUPTION_FILTER_ALARMS;
+            case 3:
+                return NotificationManager.INTERRUPTION_FILTER_NONE;
+            default:
+                return NotificationManager.INTERRUPTION_FILTER_ALL;
+        }
     }
 
     

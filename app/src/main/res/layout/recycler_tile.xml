@@ -28,20 +28,35 @@
         android:layout_height="wrap_content"
         android:text="12:00 AM"
         android:id="@+id/subtitleText"
+        android:layout_alignStart="@+id/eventName"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp"
+        android:layout_alignParentEnd="true"
+        android:gravity="start"
+        android:layout_below="@+id/eventName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do Not Disturb"
+        android:id="@+id/tv_filterLevel"
         android:layout_below="@+id/eventName"
         android:layout_alignStart="@+id/eventName"
         android:fontFamily="sans-serif-regular"
         android:layout_marginTop="2dp"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="invisible" />
 
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/activeIcon"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_priority_vector"
+        android:src="@drawable/ic_star_24dp"
         android:tint="@color/icon_tint"
         android:background="@drawable/circular_background"
+        android:transitionName="shared"
         android:duplicateParentState="true"
         android:layout_centerVertical="true" />
 
@@ -51,7 +66,8 @@
         android:id="@+id/activeSwitch"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:checked="false" />
+        android:checked="false"
+        android:visibility="gone" />
 
 
 

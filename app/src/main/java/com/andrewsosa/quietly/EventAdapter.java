@@ -1,12 +1,9 @@
 package com.andrewsosa.quietly;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +21,12 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
     // The Dataset
-    private static ArrayList<Event> mDataset;
-    private Context context;
+    private ArrayList<Event> mDataset;
+    private MainActivity activity;
 
     // Constructor for setting up the dataset
-    public EventAdapter(Context c, ArrayList<Event> myDataset) {
-        context = c;
+    public EventAdapter(MainActivity c, ArrayList<Event> myDataset) {
+        activity = c;
         mDataset = new ArrayList<>(myDataset);
     }
 
@@ -54,6 +51,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         //notifyDataSetChanged();
     }
 
+    public ArrayList<Event> getmDataset() {
+        return mDataset;
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -64,7 +65,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         holder.titleText.setText(event.getLabel());
         holder.mSwitch.setChecked(event.isActive());
-        holder.subtitleText.setText(event.getStringTime());
+        String s = event.getStringTime(event.getStartHour(), event.getStartMinute())
+                + " \u2013 " + event.getStringTime(event.getEndHour(), event.getEndMinute());
+        holder.subtitleText.setText(s);
+        holder.filterText.setText(event.getStringFilter());
         if(event.isActive()) {
             holder.tile.setActivated(true);
         } else {
@@ -74,42 +78,36 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*new MaterialDialog.Builder(context)
-                        .widgetColor(context.getResources().getColor(R.color.accent))
-                        .positiveColor(context.getResources().getColor(R.color.accent))
-                        .title("Change label")
-                        .content("Enter a reminder label:")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input("Label", event.getLabel(), new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                event.setLabel(input.toString());
-                                holder.titleText.setText(input.toString());
-                            }
-                        }).show();*/
-                Intent outgoing = new Intent(context, EventActivity.class);
-                outgoing.putExtra("extraID", mDataset.get(position).getObjectId());
-                context.startActivity(outgoing);
+                activity.startActivityForEvent(event, position, holder.mImageButton);
             }
         });
 
         holder.tile.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final Event e = mDataset.get(position);
 
-                new MaterialDialog.Builder(context)
-                        .positiveColor(context.getResources().getColor(R.color.accent))
-                        .negativeColor(context.getResources().getColor(R.color.accent))
-                        .content("Delete " + e.getLabel() + "?")
+                new MaterialDialog.Builder(activity)
+                        .positiveColor(activity.getResources().getColor(R.color.accent, activity.getTheme()))
+                        .negativeColor(activity.getResources().getColor(R.color.accent, activity.getTheme()))
+                        .content("Delete " + event.getLabel() + "?")
                         .positiveText("Delete")
                         .negativeText("Cancel")
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                e.unpinInBackground();
-                                mDataset.remove(position);
-                                notifyItemRemoved(position);
+                                Scheduler.cancelAlarmForEvent(activity, event);
+
+                                try {
+                                    mDataset.remove(position);
+                                    notifyItemRemoved(position);
+                                } catch (Exception e) {
+                                    Log.e("on remove", e.getMessage());
+                                }
+
+
+
+                                event.unpinInBackground();
+                                event.deleteInBackground();
                             }
                         })
                         .show();
@@ -119,20 +117,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             }
         });
 
-        holder.mImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerFragment timePicker = new TimePickerFragment();
-                timePicker.assignMethod(new TimePickerReceiver() {
-                    @Override
-                    public void receiveTime(int hour, int minute) {
-                        event.setTime(hour,minute);
-                        holder.subtitleText.setText(event.getStringTime());
-                    }
-                });
-                timePicker.show(((Activity)context).getFragmentManager(), "timePicker");
-            }
-        });
+        TypedArray backgrounds = activity.getResources().obtainTypedArray(R.array.icon_backgrounds);
+        holder.mImageButton.setBackgroundResource(backgrounds.getResourceId(event.getFilter(), -1));
+        TypedArray foregrounds = activity.getResources().obtainTypedArray(R.array.icon_foregrounds_vectors);
+        holder.mImageButton.setImageResource(foregrounds.getResourceId(event.getFilter(), -1));
+
+        backgrounds.recycle();
+        foregrounds.recycle();
+
 
         holder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -146,9 +138,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             }
         });
 
-        // Store event for click listening and stuff
-        //holder.event = event;
+        holder.mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isActive = holder.tile.isActivated();
+                isActive = !isActive;
+                event.setActive(isActive);
 
+                if(isActive) {
+                    Scheduler.setAlarmsForEvent(activity, event);
+                } else {
+                    Scheduler.cancelAlarmForEvent(activity, event);
+                }
+
+                try {
+                    notifyItemChanged(position);
+                } catch (Exception e) {
+                    Log.e("Image Button Click", e.getMessage());
+                }
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -176,6 +185,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public View tile;
         public TextView titleText;
         public TextView subtitleText;
+        public TextView filterText;
         public Switch mSwitch;
         public ImageButton mImageButton;
 
@@ -185,6 +195,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             tile = v;
             titleText = (TextView) v.findViewById(R.id.eventName);
             subtitleText = (TextView) v.findViewById(R.id.subtitleText);
+            filterText = (TextView) v.findViewById(R.id.tv_filterLevel);
             mSwitch = (Switch) v.findViewById(R.id.activeSwitch);
             mImageButton = (ImageButton) v.findViewById(R.id.activeIcon);
 

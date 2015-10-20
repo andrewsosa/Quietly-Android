@@ -1,8 +1,10 @@
 package com.andrewsosa.quietly;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,18 +21,22 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    final int MY_PERMISSIONS_REQUEST_NOTIFICATION_POLICY = 100;
     FloatingActionButton fab;
-
+    EventAdapter mAdapter;
+    AlarmReceiver alarmReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .sizeResId(R.dimen.divider)
+                .marginResId(R.dimen.rightmargin, R.dimen.rightmargin)
+                .build());
 
-        final EventAdapter adapter = new EventAdapter(this, new ArrayList<Event>());
-        recyclerView.setAdapter(adapter);
-
+        mAdapter = new EventAdapter(this, new ArrayList<Event>());
+        recyclerView.setAdapter(mAdapter);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,14 +63,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
-                TimePickerFragment timePicker = new TimePickerFragment();
+                /*TimePickerFragment timePicker = new TimePickerFragment();
                 timePicker.assignMethod(new TimePickerReceiver() {
                     @Override
                     public void receiveTime(int hour, int minute) {
-                        adapter.addElement(onNewEvent(new Event("Label", hour, minute)));
+                        mAdapter.addElement(onNewEvent(new Event("Label", hour, minute)));
                     }
                 });
-                timePicker.show(getFragmentManager(), "timePicker");
+                timePicker.show(getFragmentManager(), "timePicker");*/
+                chooseFilter();
 
             }
         });
@@ -73,12 +83,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(List<Event> list, ParseException e) {
                 if (e == null) {
-                    adapter.replaceDataset(list);
+                    mAdapter.replaceDataset(list);
                 } else {
                     Log.e("onCreate query find", e.getMessage());
                 }
             }
         });
+
+        /* Handle Preferences on first run */
+        SharedPreferences sp = getSharedPreferences(Quietly.SHARED_PRFERENCES, MODE_PRIVATE);
+        if(!sp.contains(Quietly.DEFAULT_FILTER)) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt(Quietly.DEFAULT_FILTER, 0);
+            editor.apply();
+        }
 
     }
 
@@ -96,137 +114,79 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        int filter = -2;
-
-        //noinspection SimplifiableIfStatement
-        switch(id) {
-            case R.id.action_filter_all:
-                filter = NotificationManager.INTERRUPTION_FILTER_ALL;
-                break;
-            case R.id.action_filter_priority:
-                filter = NotificationManager.INTERRUPTION_FILTER_PRIORITY;
-                break;
-            case R.id.action_filter_alarms:
-                filter = NotificationManager.INTERRUPTION_FILTER_ALARMS;
-                break;
-            case R.id.action_filter_none:
-                filter = NotificationManager.INTERRUPTION_FILTER_NONE;
-                break;
-        }
-
-        if(filter != -2) {
-           handleNotificationChange(filter);
+        if(id == R.id.action_settings) {
+            Intent i = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivityForResult(i, 999);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void handleNotificationChange(int filter) {
-        if(hasPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
-            try {
-                NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                if(n.isNotificationPolicyAccessGranted()) n.setInterruptionFilter(filter);
-                else {
-                    Log.d("set filter", "Access not granted by Notification Manager");
-
-                    Intent i = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivity(i);
+    public void chooseFilter() {
+        new MaterialDialog.Builder(this)
+            .title("Choose filter")
+            .items(R.array.filters_front_end)
+            .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                @Override
+                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    mAdapter.addElement(onNewEvent(new Event(which)));
+                    return true;
                 }
-            } catch (Exception e) {
-                Log.e("notifications", e.getMessage());
-            }
-        } else {
-            Snackbar.make(fab, "Notification permissions denied.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
+            })
+            .positiveText("Done")
+            .show();
     }
 
-    public boolean hasPermission(String requestedPermission) {
+    /*
+     *
+     *  CALLBACK METHODS
+     *
+     */
 
-        Log.d("permissions", "requesting permissions");
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,requestedPermission)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            Log.d("permissions", "permissions denied?");
+    public static final int EVENT_REQUEST_CODE = 100;
 
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
+    public void startActivityForEvent(Event e, int position, View icon) {
+        Intent outgoing = new Intent(this, EventActivity.class);
+        outgoing.putExtra(Event.CUSTOM_ID, e.getCustomId());
+        Log.d("sosa", "Event ID: " + e.getCustomId());
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                Snackbar.make(fab, "Gib permissuns pls", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        //ActivityOptions options = ActivityOptions
+        //        .makeSceneTransitionAnimation(this, icon, "shared");
 
-                try {
-                    return hasPermission(requestedPermission);
-                } catch (Exception e) {
-                    Log.e("hasPermission", e.getMessage());
-                    return false;
-                }
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{requestedPermission},
-                        MY_PERMISSIONS_REQUEST_NOTIFICATION_POLICY);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
-            return false;
-
-        } else {
-            Log.d("permissions", "permissions granted?");
-
-            return true;
-        }
-
-
-
+        startActivityForResult(outgoing, position);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_NOTIFICATION_POLICY: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    Snackbar.make(fab, "Notification access granted", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+        NotificationManager n = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-                } else {
 
-                    Log.d("on result", "permission denied?");
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
+        if(!n.isNotificationPolicyAccessGranted()) {
+            startActivity(new Intent(this, DispatchActivity.class));
+            finish();
+            return;
         }
-        Log.d("butts", "lol butts");
 
+        if(resultCode == EventActivity.EVENT_RESULT_SUCCESS) {
+
+
+            Collections.sort(mAdapter.getmDataset(), new Comparator<Event>() {
+                @Override
+                public int compare(Event lhs, Event rhs) {
+                    return lhs.getComparableTime() - rhs.getComparableTime();
+                }
+            });
+            mAdapter.notifyDataSetChanged();
+
+
+        }
     }
 
     private Event onNewEvent(Event e) {
         e.pinInBackground();
+        Scheduler.setAlarmsForEvent(this, e);
         return e;
     }
 

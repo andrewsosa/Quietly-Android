@@ -8,20 +8,31 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:windowBackground">@color/background</item>
 
-        <item name="android:colorControlNormal">@color/primary</item>
-        <item name="android:colorControlActivated">@color/accent</item>
-
         <item name="android:actionBarStyle">@style/AppTheme.AppBarOverlay</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/change_image_transform</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/change_image_transform</item>
 
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:elevation">0dp</item>
-        <item name="elevation">0dp</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Event" parent="AppTheme.NoActionBar">
+        <item name="colorAccent">@color/eventAccent</item>
+        <item name="android:colorButtonNormal">@color/primary</item>
+    </style>
 
 </resources>

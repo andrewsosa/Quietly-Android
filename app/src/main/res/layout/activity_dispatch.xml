@@ -1,0 +1,56 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    android:background="@color/primary"
+    tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:title="@string/app_name"
+        android:background="?attr/colorPrimary"
+        app:contentInsetEnd="16dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:id="@+id/textView2"
+            android:textColor="@color/primaryTextLight"
+            android:textSize="34sp"
+            android:fontFamily="sans-serif-medium"
+            android:shadowColor="#33000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="4"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:paddingBottom="72dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Allow Permissions"
+            android:layout_below="@+id/textView2"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:id="@+id/permissions"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

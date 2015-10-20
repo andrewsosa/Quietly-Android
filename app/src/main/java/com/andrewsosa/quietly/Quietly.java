@@ -10,6 +10,9 @@ import com.parse.ParseObject;
  */
 public class Quietly extends Application {
 
+    public final static String DEFAULT_FILTER = "default_filter";
+    public final static String SHARED_PRFERENCES = "quietly";
+
     @Override
     public void onCreate() {
         super.onCreate();

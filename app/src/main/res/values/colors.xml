@@ -4,11 +4,29 @@
     <!-- Background Colors -->
     <color name="primary">@color/blue_A200</color>
     <color name="primaryDark">@color/blue_A400</color>
-    <color name="accent">@color/blue_A200</color>
+    <color name="accent">@color/blue_A400</color>
+    <color name="eventAccent">@color/light_blue_A200</color>
     <color name="background">@color/grey_50</color>
-    <color name="dividerColor">@color/grey_300</color>
+    <color name="divider">@color/grey_300</color>
 
     <color name="white">@color/grey_white_1000</color>
+
+
+    <color name="all">@color/pink_500</color>
+    <color name="allDark">@color/pink_700</color>
+    <color name="allLight">@color/pink_400</color>
+
+    <color name="priority">@color/purple_500</color>
+    <color name="priorityDark">@color/purple_700</color>
+    <color name="priorityLight">@color/purple_400</color>
+
+    <color name="alarms">@color/orange_A400</color>
+    <color name="alarmsDark">@color/orange_A700</color>
+    <color name="alarmsLight">@color/orange_A200</color>
+
+    <color name="none">@color/grey_800</color>
+    <color name="noneDark">@color/grey_900</color>
+    <color name="noneLight">@color/grey_700</color>
 
     <!-- Text Colors -->
     <color name="primaryTextLight">@color/abc_primary_text_material_dark</color>

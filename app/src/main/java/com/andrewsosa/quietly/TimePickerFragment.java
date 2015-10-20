@@ -26,12 +26,11 @@ public class TimePickerFragment extends DialogFragment
         method = d;
     }
 
-    public void passTime(GregorianCalendar c) {
+    public void passTime(int hour, int minute) {
 
-        if(c != null) {
-            hour = c.get(Calendar.HOUR_OF_DAY);
-            minute = c.get(Calendar.MINUTE);
-        }
+        this.hour = hour;
+        this.minute = minute;
+
     }
 
     @Override
@@ -58,5 +57,18 @@ public class TimePickerFragment extends DialogFragment
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         if(method!=null) method.receiveTime(hourOfDay, minute);
+    }
+
+    public static TimePickerFragment newInstance(TimePickerReceiver receiver) {
+        TimePickerFragment fragment = new TimePickerFragment();
+        fragment.assignMethod(receiver);
+        return fragment;
+    }
+
+    public static TimePickerFragment newInstance(TimePickerReceiver receiver, int hour, int minute) {
+        TimePickerFragment fragment = new TimePickerFragment();
+        fragment.assignMethod(receiver);
+        fragment.passTime(hour, minute);
+        return fragment;
     }
 }
