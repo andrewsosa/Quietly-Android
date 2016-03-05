@@ -21,7 +21,8 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent incomingIntent) {
-        if (incomingIntent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+
+        /*if (incomingIntent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 
             // Schedule alarms for all Events
             ParseQuery<Event> query = Event.getQuery();
@@ -41,7 +42,7 @@ public class BootReceiver extends BroadcastReceiver {
                 }
             });
 
-        }
+        }*/
     }
 
 }

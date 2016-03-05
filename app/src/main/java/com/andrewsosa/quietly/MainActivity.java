@@ -184,9 +184,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Event onNewEvent(Event e) {
+    public Event onNewEvent(Event e) {
         e.pinInBackground();
         Scheduler.setAlarmsForEvent(this, e);
+        return e;
+    }
+
+    public Event onRemoveEvent(Event e) {
+
         return e;
     }
 

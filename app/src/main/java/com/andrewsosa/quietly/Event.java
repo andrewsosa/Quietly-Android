@@ -130,6 +130,7 @@ public class Event extends ParseObject implements Serializable {
     }
 
     public void setStartTime(int hour, int minute) {
+
         setStartHour(hour);
         setStartMinute(minute);
 
@@ -234,7 +235,7 @@ public class Event extends ParseObject implements Serializable {
 
     @Override
     public String toString() {
-        return getLabel();
+        return getString(CUSTOM_ID);
     }
 
     public static ParseQuery<Event> getQuery() {

@@ -16,15 +16,15 @@ public class Scheduler {
     public static String EVENT_ID = "eventid";
     private static int REQUEST_CODE = 1337;
 
-    private static PendingIntent makeStartingPendingIntent(Context c, Event e) {
+    public static PendingIntent makeStartingPendingIntent(Context c, Event e) {
         Intent intent = new Intent(c, AlarmReceiver.class);
         intent.setAction(Intent.ACTION_MAIN);
-        intent.putExtra(EVENT_ID, e.getCustomId());
+        intent.putExtra(Event.CUSTOM_ID, e.getCustomId());
         intent.putExtra("starting", true);
         return PendingIntent.getBroadcast(c, REQUEST_CODE, intent, PendingIntent.FLAG_ONE_SHOT);
     }
 
-    private static PendingIntent makeEndingPendingIntent(Context c, Event e) {
+    public static PendingIntent makeEndingPendingIntent(Context c, Event e) {
         Intent intent = new Intent(c, AlarmReceiver.class);
         intent.setAction(Intent.ACTION_MAIN);
         intent.putExtra(EVENT_ID, e.getCustomId());
@@ -54,7 +54,7 @@ public class Scheduler {
         endTime.setTimeInMillis(System.currentTimeMillis());
         endTime.set(Calendar.HOUR_OF_DAY, event.getEndHour());
         endTime.set(Calendar.MINUTE, event.getEndMinute());
-        if(endTime.before(now)) startTime.add(Calendar.DATE, 1);
+        while(endTime.before(startTime)) endTime.add(Calendar.DATE, 1);
 
 
         // Set alarms

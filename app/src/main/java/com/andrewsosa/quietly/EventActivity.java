@@ -1,5 +1,8 @@
 package com.andrewsosa.quietly;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -15,6 +18,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.util.Calendar;
 
 public class EventActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -76,8 +81,13 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                PendingIntent spi = Scheduler.makeStartingPendingIntent(EventActivity.this, mEvent);
+                Calendar startTime = Calendar.getInstance();
+                startTime.add(Calendar.SECOND, 15);
+                alarmManager.setExact(AlarmManager.RTC, startTime.getTimeInMillis(), spi);
+
             }
         });
 
@@ -92,11 +102,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mEvent.setActive(isChecked);
 
-                if(isChecked) {
+                /*if(isChecked) {
                     Scheduler.setAlarmsForEvent(EventActivity.this, mEvent);
                 } else {
                     Scheduler.cancelAlarmForEvent(EventActivity.this, mEvent);
-                }
+                }*/
 
                 try {
                     tv_SwitchLabel.setText((mEvent.isActive()) ? "On" : "Off");
@@ -181,7 +191,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void showStartPicker() {
-        Scheduler.cancelAlarmForEvent(this, mEvent);
         TimePickerFragment timePickerFragment =
                 TimePickerFragment.newInstance(new StartTimeReceiver(),
                         mEvent.getStartHour(),
@@ -190,7 +199,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void showEndPicker() {
-        Scheduler.cancelAlarmForEvent(this, mEvent);
         TimePickerFragment timePickerFragment =
                 TimePickerFragment.newInstance(new EndTimeReceiver(),
                         mEvent.getEndHour(),
@@ -235,25 +243,24 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void onEventTimeChange(Event e) {
-        Scheduler.setAlarmsForEvent(this, e);
-    }
 
     public class StartTimeReceiver implements TimePickerReceiver {
         @Override
         public void receiveTime(int hour, int minute) {
+            Scheduler.cancelAlarmForEvent(EventActivity.this, mEvent);
             mEvent.setStartTime(hour, minute);
             tv_StartTime.setText(mEvent.getStringTime(mEvent.getStartHour(), mEvent.getStartMinute()));
-            onEventTimeChange(mEvent);
+            Scheduler.setAlarmsForEvent(EventActivity.this, mEvent);
         }
     }
 
     public class EndTimeReceiver implements TimePickerReceiver {
         @Override
         public void receiveTime(int hour, int minute) {
+            Scheduler.cancelAlarmForEvent(EventActivity.this, mEvent);
             mEvent.setEndTime(hour, minute);
             tv_EndTime.setText(mEvent.getStringTime(mEvent.getEndHour(), mEvent.getEndMinute()));
-            onEventTimeChange(mEvent);
+            Scheduler.setAlarmsForEvent(EventActivity.this, mEvent);
         }
     }
 }

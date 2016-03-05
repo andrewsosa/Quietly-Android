@@ -95,6 +95,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
+
                                 Scheduler.cancelAlarmForEvent(activity, event);
 
                                 try {
@@ -145,11 +146,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 isActive = !isActive;
                 event.setActive(isActive);
 
-                if(isActive) {
+                /*if(isActive) {
                     Scheduler.setAlarmsForEvent(activity, event);
                 } else {
                     Scheduler.cancelAlarmForEvent(activity, event);
-                }
+                }*/
 
                 try {
                     notifyItemChanged(position);
